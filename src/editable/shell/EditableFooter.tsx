@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { globalContent } from '@/editable/content/global.content'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
@@ -11,34 +9,38 @@ export function EditableFooter() {
   const { session, logout } = useEditableLocalAuthSession()
 
   return (
-    <footer className="border-t-8 border-[var(--slot4-accent)] bg-black text-white">
-      <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:px-10 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_.7fr_.7fr]">
+    <footer className="border-t border-[#edf1f3] bg-white text-[#06131d]">
+      <div className="mx-auto max-w-[1160px] px-4 py-16 sm:px-6 lg:px-0 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-24">
           <div>
-            <Link href="/" className="editorial-brand text-5xl font-black text-[var(--slot4-accent)] sm:text-6xl">{SITE_CONFIG.name}</Link>
-            <p className="mt-6 max-w-xl text-sm leading-7 text-white/62">{globalContent.footer?.description || SITE_CONFIG.description}</p>
-            <form action="/signup" className="mt-8 flex max-w-xl border border-white/35">
-              <input name="email" type="email" placeholder="Email for newsroom updates" className="min-w-0 flex-1 bg-transparent px-4 py-4 text-sm outline-none placeholder:text-white/40" />
-              <button className="bg-[var(--slot4-accent)] px-5 text-xs font-black uppercase tracking-[.14em]">Subscribe</button>
-            </form>
+            <h2 className="text-4xl font-black tracking-[-.04em]">About</h2>
+            <p className="mt-16 max-w-[270px] text-base leading-8">
+              {globalContent.footer?.description || `${SITE_CONFIG.name} gathers timely business updates, market notes, and media distribution items for quick public reading.`}
+            </p>
           </div>
+
           <div>
-            <h3 className="border-b border-white/25 pb-3 text-[10px] font-black uppercase tracking-[.22em] text-white/55">Explore</h3>
-            <div className="mt-4 grid gap-3">
-              <Link href="/search" className="group inline-flex items-center justify-between text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Archive<ArrowRight className="h-4 w-4" /></Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="border-b border-white/25 pb-3 text-[10px] font-black uppercase tracking-[.22em] text-white/55">Publication</h3>
-            <div className="mt-4 grid gap-3">
-              <Link href="/about" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">About</Link>
-              <Link href="/contact" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Contact</Link>
-              {session ? <><Link href="/create" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Publish</Link><button onClick={logout} className="text-left text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Logout</button></> : <><Link href="/login" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Log in</Link><Link href="/signup" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Subscribe</Link></>}
+            <h2 className="text-4xl font-black tracking-[-.04em]">Contact Us</h2>
+            <div className="mt-16 text-sm leading-7">
+              <form action="/search" className="mt-16">
+                <label htmlFor="footer-search" className="block text-sm font-black">Search</label>
+                <div className="mt-1 flex">
+                  <input id="footer-search" name="q" type="search" className="h-[50px] min-w-0 border border-[#d8e2e6] px-3 outline-none focus:border-[#3B7597]" />
+                  <button className="h-[50px] bg-[#111416] px-5 text-sm font-black uppercase tracking-[.04em] text-white">Search</button>
+                </div>
+              </form>
+              {session ? <button onClick={logout} className="mt-6 text-sm font-black hover:text-[#3B7597]">Logout</button> : null}
             </div>
           </div>
         </div>
+
+        <div className="mt-16 border-t border-[#edf1f3] pt-6 text-sm">
+          Copyright © {year}. All rights reserved. Theme: {SITE_CONFIG.name}. Powered by public media distribution.
+        </div>
       </div>
-      <div className="border-t border-white/20 px-4 py-5 text-center text-[10px] font-black uppercase tracking-[.18em] text-white/45">© {year} {SITE_CONFIG.name}. Independent media and public information.</div>
+      <a href="#top" className="fixed bottom-8 right-6 hidden origin-center rotate-[-90deg] items-center gap-3 text-sm font-semibold text-[#59636a] lg:flex">
+        <span className="rotate-90 text-3xl leading-none">↑</span> Back To Top
+      </a>
     </footer>
   )
 }
