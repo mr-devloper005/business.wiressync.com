@@ -168,7 +168,7 @@ function EditorialArchive({
   posts,
   pagination,
   category,
-  categoryLabel,
+  categoryLabel: _categoryLabel,
   categories,
   basePath,
   label,
@@ -182,112 +182,121 @@ function EditorialArchive({
   label: string
 }) {
   const page = pagination.page || 1
-  const lead = posts[0]
-  const secondary = posts.slice(1, 3)
-  const remaining = posts.slice(3)
+  const popularPosts = posts.slice(0, 5)
+  const visiblePages = [1, 2, 3, 4, 5, 6].filter((item) => item <= (pagination.totalPages || 1))
 
   return (
     <EditableSiteShell>
-      <main className="min-h-screen bg-[#f7f4ef] text-[#111]">
-        <section className="border-b border-black bg-white">
-          <div className="mx-auto flex max-w-[var(--editable-container)] flex-col gap-6 px-4 py-10 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:px-8 lg:py-14">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-[#c92f2f]">The newsroom</p>
-              <h1 className="editorial-brand mt-3 text-6xl font-black leading-none tracking-[-0.055em] sm:text-7xl lg:text-8xl">
-                {category === 'all' ? label : categoryLabel}
-              </h1>
-            </div>
-            <p className="max-w-md border-l-4 border-[#c92f2f] pl-5 text-sm font-bold leading-7 text-black/65">
-              Timely reporting, sharp perspectives, and media-ready stories organized for fast discovery.
-            </p>
-          </div>
-        </section>
-
-        <section className="border-b border-black bg-[#171717] text-white">
-          <div className="mx-auto flex max-w-[var(--editable-container)] gap-7 overflow-x-auto px-4 py-4 text-xs font-black uppercase tracking-[0.16em] sm:px-6 lg:px-8">
-            <Link href={basePath} className={category === 'all' ? 'text-[#f34a43]' : 'hover:text-[#f34a43]'}>Latest</Link>
-            {categories.slice(0, 8).map((item) => (
-              <Link key={item.slug} href={pageHref(basePath, item.slug, 1)} className={category === item.slug ? 'text-[#f34a43]' : 'whitespace-nowrap hover:text-[#f34a43]'}>
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {lead ? (
-          <section className="mx-auto grid max-w-[var(--editable-container)] border-x border-black bg-white lg:grid-cols-[1.75fr_0.75fr]">
-            <Link href={`${basePath}/${lead.slug}`} className="group relative min-h-[34rem] overflow-hidden border-b border-black lg:border-b-0 lg:border-r">
-              <img src={getImage(lead)} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-9">
-                <span className="bg-[#c92f2f] px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em]">{getCategory(lead, label)}</span>
-                <h2 className="editorial-serif mt-5 max-w-4xl text-4xl font-black leading-[0.98] tracking-[-0.045em] sm:text-6xl">{lead.title}</h2>
-                <p className="mt-5 max-w-2xl line-clamp-2 text-sm font-semibold leading-7 text-white/80">{getSummary(lead)}</p>
+      <main className="min-h-screen bg-white text-[#06131d]">
+        <section className="mx-auto grid max-w-[1160px] gap-16 px-4 pb-20 pt-20 sm:px-6 lg:grid-cols-[minmax(0,770px)_310px] lg:px-0 lg:pt-24">
+          <div className="min-w-0">
+            {posts.length ? (
+              <div className="grid gap-20">
+                {posts.map((post, index) => (
+                  <DirectoryStoryCard
+                    key={post.id || post.slug}
+                    post={post}
+                    href={`${basePath}/${post.slug}`}
+                    category={getCategory(post, label)}
+                    label={label}
+                    index={index}
+                  />
+                ))}
               </div>
-            </Link>
-            <div className="grid">
-              <div className="border-b border-black bg-[#c92f2f] p-6 text-white">
-                <p className="text-xs font-black uppercase tracking-[0.24em]">Top stories</p>
-                <p className="editorial-serif mt-3 text-3xl font-black leading-tight">What the newsroom is watching now.</p>
+            ) : (
+              <div className="border border-dashed border-[#b9d4dc] bg-[#f6fbfc] p-12 text-center">
+                <Search className="mx-auto h-8 w-8 text-[#3B7597]" />
+                <h2 className="mt-4 text-3xl font-black tracking-[-0.04em]">No stories found</h2>
+                <p className="mt-2 text-sm text-[#405c6b]">Try another category or check back when new updates arrive.</p>
               </div>
-              {secondary.map((post, index) => (
-                <Link key={post.id || post.slug} href={`${basePath}/${post.slug}`} className="group grid grid-cols-[7rem_1fr] border-b border-black bg-white last:border-b-0">
-                  <img src={getImage(post)} alt="" className="h-full min-h-40 w-full object-cover grayscale transition group-hover:grayscale-0" />
-                  <div className="p-5">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#c92f2f]">0{index + 1}</p>
-                    <h3 className="editorial-serif mt-3 text-xl font-black leading-tight">{post.title}</h3>
-                  </div>
+            )}
+
+            <nav className="mt-20 flex flex-wrap items-center gap-5 border-t border-[#edf1f3] pt-8 text-sm font-black" aria-label="Pagination">
+              {pagination.hasPrevPage ? (
+                <Link href={pageHref(basePath, category, page - 1)} className="inline-flex items-center gap-4 hover:text-[#3B7597]"><span className="text-4xl leading-none">←</span> Previous</Link>
+              ) : null}
+              {visiblePages.map((item) => (
+                <Link key={item} href={pageHref(basePath, category, item)} className={item === page ? 'text-[#06131d]' : 'text-[#7b8b92] hover:text-[#3B7597]'}>
+                  {item}
                 </Link>
               ))}
-            </div>
-          </section>
-        ) : null}
-
-        <section className="mx-auto max-w-[var(--editable-container)] border-x border-black bg-[#f7f4ef] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-5 border-b-4 border-black pb-4">
-            <h2 className="editorial-brand text-4xl font-black tracking-[-0.04em] sm:text-5xl">More from the desk</h2>
-            <form action={basePath} className="flex border border-black bg-white">
-              <select name="category" defaultValue={category} className="h-11 min-w-44 bg-transparent px-3 text-xs font-black uppercase outline-none">
-                <option value="all">All categories</option>
-                {categories.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}
-              </select>
-              <button className="h-11 bg-black px-5 text-xs font-black uppercase tracking-[0.14em] text-white">Filter</button>
-            </form>
+              {(pagination.totalPages || 1) > 6 ? <span className="text-[#7b8b92]">...</span> : null}
+              {(pagination.totalPages || 1) > 6 ? <Link href={pageHref(basePath, category, pagination.totalPages || 1)} className="text-[#7b8b92] hover:text-[#3B7597]">{pagination.totalPages}</Link> : null}
+              {pagination.hasNextPage ? (
+                <Link href={pageHref(basePath, category, page + 1)} className="inline-flex items-center gap-4 hover:text-[#3B7597]">Next <span className="text-4xl leading-none">→</span></Link>
+              ) : null}
+            </nav>
           </div>
 
-          {remaining.length ? (
-            <div className="grid border-l border-t border-black md:grid-cols-2 xl:grid-cols-3">
-              {remaining.map((post, index) => (
-                <Link key={post.id || post.slug} href={`${basePath}/${post.slug}`} className="group border-b border-r border-black bg-white">
-                  <div className="aspect-[16/10] overflow-hidden bg-black">
-                    <img src={getImage(post)} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center justify-between gap-4 text-[10px] font-black uppercase tracking-[0.18em] text-[#c92f2f]">
-                      <span>{getCategory(post, label)}</span><span>{String(index + 3).padStart(2, '0')}</span>
-                    </div>
-                    <h3 className="editorial-serif mt-4 text-2xl font-black leading-[1.05]">{post.title}</h3>
-                    <p className="mt-4 line-clamp-3 text-sm leading-6 text-black/60">{getSummary(post)}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : !lead ? (
-            <div className="border border-dashed border-black bg-white p-12 text-center">
-              <Search className="mx-auto h-8 w-8" />
-              <h2 className="editorial-serif mt-4 text-3xl font-black">No stories found</h2>
-              <p className="mt-2 text-sm text-black/60">Try another category or publish a new newsroom story.</p>
-            </div>
-          ) : null}
-
-          <div className="mt-10 flex items-center justify-center gap-0">
-            {pagination.hasPrevPage ? <Link href={pageHref(basePath, category, page - 1)} className="border border-black bg-white px-5 py-3 text-xs font-black uppercase">Previous</Link> : null}
-            <span className="border-y border-black bg-[#c92f2f] px-5 py-3 text-xs font-black uppercase text-white">Page {page} / {pagination.totalPages || 1}</span>
-            {pagination.hasNextPage ? <Link href={pageHref(basePath, category, page + 1)} className="border border-black bg-white px-5 py-3 text-xs font-black uppercase">Next</Link> : null}
-          </div>
+          <EditorialSidebar
+            popularPosts={popularPosts}
+            categories={categories}
+            category={category}
+            basePath={basePath}
+          />
         </section>
       </main>
     </EditableSiteShell>
+  )
+}
+
+function DirectoryStoryCard({ post, href, category, label, index }: { post: SitePost; href: string; category: string; label: string; index: number }) {
+  const summary = getSummary(post) || 'A concise update is available with the full post details inside.'
+  const published = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
+  const firstLetter = summary.replace(/^[^a-z0-9]+/i, '').charAt(0).toUpperCase() || post.title.charAt(0).toUpperCase() || 'B'
+  const badgeClass = index % 3 === 1 ? 'bg-[#3B7597] text-white px-1' : index % 3 === 2 ? 'text-[#3B7597]' : 'text-[#f06b73]'
+  const dateClass = index % 3 === 1 ? 'bg-[#3B7597] text-white px-1' : 'text-[#f06b73]'
+
+  return (
+    <article className={index === 0 ? 'pt-1' : ''}>
+      <div className="mb-4 flex flex-wrap items-center gap-3 text-[12px] tracking-[.16em]">
+        <span className={badgeClass}>{category || label}</span>
+        <span className="h-px w-10 bg-[#f06b73]" />
+        {published ? <time className={dateClass}>{published}</time> : null}
+      </div>
+      <h2 className="max-w-[760px] text-[20px] font-black leading-[1.5] tracking-[-.02em] sm:text-[21px]">
+        <Link href={href} className="hover:text-[#3B7597]">{post.title}</Link>
+      </h2>
+      <Link href={href} className="group mt-3 block">
+        <p className="text-[16px] leading-[1.8] text-[#102430]">
+          <span className="float-left mr-5 mt-2 text-[86px] font-black leading-[.7] text-[#343a40] drop-shadow-[3px_3px_0_rgba(9,60,93,.14)]">{firstLetter}</span>
+          {summary.length > 360 ? `${summary.slice(0, 360).trim()} [...]` : summary}
+        </p>
+        <span className="mt-9 inline-flex items-center gap-3 text-sm font-black uppercase group-hover:text-[#3B7597]">
+          <span className="h-px w-8 bg-current" /> Read More
+        </span>
+      </Link>
+    </article>
+  )
+}
+
+function EditorialSidebar({ popularPosts, categories, category, basePath }: { popularPosts: SitePost[]; categories: { name: string; slug: string }[]; category: string; basePath: string }) {
+  return (
+    <aside className="min-w-0 pt-8 lg:pt-10">
+      <section>
+        <h2 className="text-4xl font-black tracking-[-.04em]">Popular Posts</h2>
+        <div className="mt-10 grid gap-4">
+          {popularPosts.map((post) => (
+            <Link key={post.id || post.slug} href={`${basePath}/${post.slug}`} className="text-[14px] leading-6 hover:text-[#3B7597]">
+              {post.title}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-4xl font-black tracking-[-.04em]">Categories</h2>
+        <ul className="mt-16 grid gap-4 text-sm">
+          {categories.slice(0, 8).map((item) => (
+            <li key={item.slug} className="ml-4 list-square">
+              <Link href={pageHref(basePath, item.slug, 1)} className={category === item.slug ? 'font-black text-[#3B7597]' : 'hover:text-[#3B7597]'}>
+                {item.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </aside>
   )
 }
 

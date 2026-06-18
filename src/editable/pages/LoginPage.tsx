@@ -12,18 +12,28 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function LoginPage() {
   return (
     <EditableSiteShell>
-      <main className="bg-[#f7f4ef] text-[#111]">
-        <section className="mx-auto grid min-h-[calc(100vh-12rem)] max-w-[var(--editable-container)] border-x border-black bg-white lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="flex flex-col justify-center border-b border-black bg-[#c92f2f] p-8 text-white sm:p-12 lg:border-b-0 lg:border-r lg:p-16">
-            <p className="text-xs font-black uppercase tracking-[0.28em]">{pagesContent.auth.login.badge}</p>
-            <h1 className="editorial-brand mt-5 max-w-xl text-6xl font-black leading-[0.92] tracking-[-0.055em] sm:text-8xl">{pagesContent.auth.login.title}</h1>
-            <p className="mt-6 max-w-lg text-sm font-semibold leading-8 text-white/75">{pagesContent.auth.login.description}</p>
+      <main className="bg-white text-[#06131d]">
+        <section className="mx-auto grid min-h-[calc(100vh-12rem)] max-w-[1160px] px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_430px] lg:gap-16 lg:px-0 lg:py-20">
+          <div className="flex flex-col justify-center border-t border-[#edf1f3] py-8 lg:py-0">
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-[#3B7597]">{pagesContent.auth.login.badge}</p>
+            <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[1.02] tracking-[-0.045em] sm:text-7xl">{pagesContent.auth.login.title}</h1>
+            <p className="mt-6 max-w-xl text-base font-semibold leading-8 text-[#405c6b]">{pagesContent.auth.login.description}</p>
+            <div className="mt-10 grid max-w-2xl gap-0 border-y border-[#edf1f3] text-sm sm:grid-cols-3">
+              {['Fast access', 'Saved publishing', 'Clean archive'].map((item, index) => (
+                <div key={item} className="border-b border-[#edf1f3] py-5 sm:border-b-0 sm:border-r sm:px-5 sm:first:pl-0 sm:last:border-r-0">
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-[#3B7597]">0{index + 1}</p>
+                  <p className="mt-2 font-black">{item}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-col justify-center p-7 sm:p-12 lg:p-16">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-[#c92f2f]">Member access</p>
-            <h2 className="editorial-serif mt-3 text-4xl font-black">{pagesContent.auth.login.formTitle}</h2>
+          <div className="flex flex-col justify-center border-t border-[#6FD1D7] bg-white py-8 lg:py-0">
+            <div className="border border-[#edf1f3] bg-[#f8fcfd] p-6 sm:p-8">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-[#3B7597]">Member access</p>
+            <h2 className="mt-3 text-4xl font-black tracking-[-0.04em]">{pagesContent.auth.login.formTitle}</h2>
             <EditableLocalLoginForm />
-            <p className="mt-5 border-t border-black pt-5 text-sm text-black/65">New here? <Link href="/signup" className="font-black text-[#c92f2f] underline-offset-4 hover:underline">{pagesContent.auth.login.createCta}</Link></p>
+            <p className="mt-5 border-t border-[#d8e2e6] pt-5 text-sm text-[#405c6b]">New here? <Link href="/signup" className="font-black text-[#3B7597] underline-offset-4 hover:underline">{pagesContent.auth.login.createCta}</Link></p>
+            </div>
           </div>
         </section>
       </main>
