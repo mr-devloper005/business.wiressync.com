@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { globalContent } from '@/editable/content/global.content'
 import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
@@ -12,7 +11,7 @@ export function EditableFooter() {
   return (
     <footer className="border-t border-[#edf1f3] bg-white text-[#06131d]">
       <div className="mx-auto max-w-[1160px] px-4 py-16 sm:px-6 lg:px-0 lg:py-24">
-        <div className="grid gap-12 lg:grid-cols-3 lg:gap-24">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-24">
           <div>
             <h2 className="text-4xl font-black tracking-[-.04em]">About</h2>
             <p className="mt-16 max-w-[270px] text-base leading-8">
@@ -21,23 +20,8 @@ export function EditableFooter() {
           </div>
 
           <div>
-            <h2 className="text-4xl font-black tracking-[-.04em]">Categories</h2>
-            <ul className="mt-16 grid gap-3 text-sm">
-              {['Business', 'Economy', 'Fin-Tech', 'Markets', 'Uncategorized', 'Media Distribution'].map((item) => (
-                <li key={item} className="ml-4 list-square">
-                  <Link href={item === 'Media Distribution' ? '/media-distribution' : `/search?category=${encodeURIComponent(item.toLowerCase())}`} className="hover:text-[#3B7597]">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
             <h2 className="text-4xl font-black tracking-[-.04em]">Contact Us</h2>
             <div className="mt-16 text-sm leading-7">
-              <p className="font-black">Email:</p>
-              <Link href="mailto:hello@wiressync.com" className="hover:text-[#3B7597]">hello@wiressync.com</Link>
               <form action="/search" className="mt-16">
                 <label htmlFor="footer-search" className="block text-sm font-black">Search</label>
                 <div className="mt-1 flex">

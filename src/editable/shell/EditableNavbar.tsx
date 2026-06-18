@@ -18,6 +18,10 @@ export function EditableNavbar() {
           <Link href="/about">About Us</Link>
           <Link href="/create">Write for Us</Link>
           <Link href="/contact">Contact Us</Link>
+          <Link href="/search" className="inline-flex items-center gap-1.5" aria-label="Open search page">
+            <Search className="h-3.5 w-3.5" />
+            Search
+          </Link>
         </nav>
       </div>
 
@@ -36,29 +40,12 @@ export function EditableNavbar() {
         <div className="flex items-center justify-end gap-4">
           {session ? (
             <>
-              <Link href="/create" className="hidden text-xs font-black uppercase tracking-[.12em] sm:block">Create</Link>
               <button type="button" onClick={logout} className="hidden text-xs font-black uppercase tracking-[.12em] sm:block">Logout</button>
             </>
           ) : <Link href="/login" className="hidden text-xs font-black uppercase tracking-[.12em] sm:block">Log in</Link>}
           <Link href={session ? '/create' : '/signup'} className="hidden bg-[#093C5D] px-4 py-3 text-[10px] font-black uppercase tracking-[.14em] text-white sm:px-6 lg:inline-flex">
             {session ? 'Publish' : 'Subscribe'}
           </Link>
-        </div>
-      </div>
-
-      <div className="bg-white">
-        <div className="mx-auto flex min-h-[70px] max-w-[760px] items-center justify-center gap-6 px-4 text-sm">
-          <Link href="/" className="border-b-2 border-[#111416] py-2 font-bold">Home</Link>
-          <Link href="/media-distribution" className="py-2 hover:text-[#3B7597]">Business</Link>
-          <Link href="/search?category=fin-tech" className="py-2 hover:text-[#3B7597]">Fin-Tech</Link>
-          <Link href="/search?category=economy" className="py-2 hover:text-[#3B7597]">Economy</Link>
-          <Link href="/search?category=markets" className="py-2 hover:text-[#3B7597]">Markets</Link>
-          <form action="/search" className="ml-auto flex min-w-0 items-center">
-            <button className="inline-flex h-10 w-10 items-center justify-center" aria-label="Search">
-              <Search className="h-5 w-5" />
-            </button>
-            <input name="q" type="search" placeholder="Search" className="w-0 min-w-0 border-0 bg-transparent p-0 text-sm outline-none transition-all focus:w-40 focus:border-b focus:border-black focus:px-2" />
-          </form>
         </div>
       </div>
 
