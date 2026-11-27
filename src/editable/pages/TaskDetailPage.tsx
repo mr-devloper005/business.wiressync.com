@@ -134,7 +134,6 @@ function BackLink({ task }: { task: TaskKey }) {
 
 function ArticleDetail({ task, post, related, comments }: { task: TaskKey; post: SitePost; related: SitePost[]; comments: Array<{ id: string; name: string; comment: string; createdAt: string }> }) {
   const images = getImages(post)
-  const published = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
   return (
     <section className="bg-white text-[#06131d]">
       <header>
@@ -143,7 +142,6 @@ function ArticleDetail({ task, post, related, comments }: { task: TaskKey; post:
           <div className="mt-12 flex flex-wrap items-center gap-3 text-[12px] tracking-[.16em] text-[#3B7597]">
             <span>{categoryOf(post, 'Media Distribution')}</span>
             <span className="h-px w-10 bg-[#6FD1D7]" />
-            {published ? <time>{published}</time> : null}
           </div>
           <h1 className="mt-5 max-w-5xl text-4xl font-black leading-[1.08] tracking-[-.035em] sm:text-5xl lg:text-6xl">{post.title}</h1>
           {summaryText(post) ? <p className="mt-6 max-w-3xl text-lg font-semibold leading-8 text-[#405c6b]">{summaryText(post)}</p> : null}
@@ -406,7 +404,6 @@ function RelatedPanel({ task, post, related, compact = false }: { task: TaskKey;
           <div className="mt-4 grid gap-3 text-sm font-bold text-[#405c6b]">
             <p className="inline-flex items-center gap-2"><Tag className="h-4 w-4" /> Task: {taskConfig?.label || task}</p>
             <p className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4" /> Site: {SITE_CONFIG.name}</p>
-            {post.publishedAt ? <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p> : null}
           </div>
         </div>
       ) : null}
